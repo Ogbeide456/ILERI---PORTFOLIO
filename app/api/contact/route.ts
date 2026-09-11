@@ -36,15 +36,21 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, email, message } = body || {};
+    const { firstName, lastName, email, message } = body || {};
 
-    if (!name || typeof name !== 'string' || !name.trim()) {
+    if (!firstName || typeof firstName !== 'string' || !firstName.trim()) {
       return NextResponse.json(
-        { success: false, error: 'Please provide a valid name.' },
+        { success: false, error: 'Please provide a valid first name.' },
         { status: 400 }
       );
     }
 
+    if (!lastName || typeof lastName !== 'string' || !lastName.trim()) {
+      return NextResponse.json(
+        { success: false, error: 'Please provide a valid last name.' },
+        { status: 400 }
+      );
+    }
     if (!email || typeof email !== 'string' || !email.trim()) {
       return NextResponse.json(
         { success: false, error: 'Please provide an email address.' },
@@ -69,7 +75,8 @@ export async function POST(request: Request) {
     await dbConnect();
 
     const newSubmission = await Contact.create({
-      name: name.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       email: email.trim().toLowerCase(),
       message: message.trim(),
     });
@@ -79,8 +86,8 @@ export async function POST(request: Request) {
         success: true,
         message: 'Message sent successfully!',
         data: {
-          id: newSubmission._id,
-          name: newSubmission.name,
+          firstName: newSubmission.firstName,
+          lastName: newSubmission.lastName,
           email: newSubmission.email,
           message: newSubmission.message,
           createdAt: newSubmission.createdAt,
