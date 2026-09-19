@@ -1,6 +1,7 @@
 'use client';
 import { useState, ReactNode } from 'react';
 
+
 type TabId = 'skills' | 'experience' | 'education' | 'certifications' | 'more';
 
 const tabs: { id: TabId; label: string }[] = [
@@ -349,6 +350,9 @@ const tabContent: Record<TabId, TabItem[]> = {
   ],
 };
 
+
+
+
 export default function About() {
   const [activeTab, setActiveTab] = useState<TabId>('skills');
 
@@ -361,7 +365,7 @@ export default function About() {
           <div className="about-col-1">
             <div className="avatar-wrapper">
               <img
-                src="/my-dp.jpg"
+                src="/IMG_20260917_133145.jpg"
                 alt="Ogbeide Samuel Ilerioluwakiye"
                 className="avatar-img"
               />

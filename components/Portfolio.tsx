@@ -110,8 +110,6 @@ export default function Portfolio() {
                 type="button"
                 className="portfolio-media"
                 aria-label={`View details for ${project.title}`}
-                onMouseEnter={() => setActiveIndex(i)}
-                onFocus={() => setActiveIndex(i)}
                 onClick={() => setActiveIndex(i)}
               >
                 <ProjectMedia project={project} />
@@ -125,7 +123,7 @@ export default function Portfolio() {
       {activeProject && (
         <div
           className="portfolio-modal-backdrop"
-          onClick={() => setActiveIndex(null)}
+          onClick={() => setActiveIndex(null)} //
         >
           <div
             className="portfolio-modal"

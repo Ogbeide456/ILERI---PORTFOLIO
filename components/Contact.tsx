@@ -1,5 +1,6 @@
 "use client";
 import { useState, type FormEvent, type ChangeEvent } from "react";
+import emailjs from '@emailjs/browser';
 
 interface FormData {
   firstName: string;
@@ -14,6 +15,10 @@ interface FormErrors {
   email?: string;
   message?: string;
 }
+//EmailJS essentials
+const serviceId = 'service_7on5xc9';
+const templateId = 'template_62vwsyh';
+const publicKey = 'uTfsYIgmUHgKtHNF6';
 
 export default function Contact() {
   const [formData, setFormData] = useState<FormData>({
@@ -28,7 +33,7 @@ export default function Contact() {
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const nameRegex = /^[A-Za-z\s''-]+$/;
 
   const handleChange = (
@@ -71,7 +76,7 @@ export default function Contact() {
     if (!trimmedEmail) {
       errors.email = "Please enter your email address.";
     } else if (!emailRegex.test(trimmedEmail)) {
-      errors.email = "Please enter a valid email address.";
+      errors.email = "Invalid email address";
     }
 
     if (!trimmedMsg) {
@@ -94,6 +99,45 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
+    let emailSuccess = false;
+    let emailError: string | null = null;
+    let dbSuccess = false;
+    let dbError: string | null = null;
+
+    const fullName = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
+    const userEmail = formData.email.trim();
+    const userMessage = formData.message.trim();
+
+    // 1. Send email via EmailJS to your Gmail
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          // Support all standard EmailJS template variable naming conventions
+          from_name: fullName,
+          name: fullName,
+          user_name: fullName,
+          first_name: formData.firstName.trim(),
+          last_name: formData.lastName.trim(),
+          from_email: userEmail,
+          user_email: userEmail,
+          email: userEmail,
+          reply_to: userEmail,
+          message: userMessage,
+          to_email: "ileriunique40@gmail.com",
+          to_name: "Ileri",
+        },
+        publicKey
+      );
+      emailSuccess = true;
+    } catch (err: unknown) {
+      console.error("EmailJS error:", err);
+      const e = err as { text?: string; message?: string };
+      emailError = e?.text || e?.message || "EmailJS failed to deliver to Gmail.";
+    }
+
+    // 2. Save submission to MongoDB database
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -108,43 +152,51 @@ export default function Contact() {
         }),
       });
 
-      let data: { error?: string; message?: string; success?: boolean; data?: unknown } = {};
+      let data: { error?: string; message?: string; success?: boolean } = {};
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
         const rawText = await response.text();
         if (!response.ok) {
-          throw new Error(`Server returned status ${response.status}. ${rawText.slice(0, 80)}`);
+          throw new Error(`Server status ${response.status}: ${rawText.slice(0, 80)}`);
         }
       }
 
-      if (!response.ok || data.success === false) {
-        throw new Error(data.error || "Failed to send message. Please try again.");
+      if (response.ok && data.success !== false) {
+        dbSuccess = true;
+      } else {
+        dbError = data.error || "Failed to save message to MongoDB.";
       }
-
-      // Success: Clear form and display success message
-      setSuccessMsg("✅ Message sent successfully!");
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        message: "",
-      });
-      setFieldErrors({});
-
-      setTimeout(() => {
-        setSuccessMsg("");
-      }, 6000);
     } catch (err: unknown) {
-      const errorMessage =
+      console.error("MongoDB save error:", err);
+      dbError =
         err instanceof Error
           ? err.message
-          : "An unexpected error occurred while sending your message. Please try again.";
-      setErrorMsg(`❌ ${errorMessage}`);
-      // Note: formData is intentionally preserved so user does not lose entered data
+          : "Could not reach database API.";
     } finally {
       setIsSubmitting(false);
+    }
+
+    // Handle feedback based on results
+    if (emailSuccess && dbSuccess) {
+      setSuccessMsg("✅ Message sent successfully! Delivered to Gmail and saved to MongoDB.");
+      setFormData({ firstName: "", lastName: "", email: "", message: "" });
+      setFieldErrors({});
+      setTimeout(() => setSuccessMsg(""), 6000);
+    } else if (emailSuccess && !dbSuccess) {
+      // Email reached Gmail, but MongoDB is blocked by IP whitelist or connection
+      setSuccessMsg("✅ Email sent to your Gmail successfully!");
+      setErrorMsg(`⚠️ Notice: Could not save to MongoDB: ${dbError}`);
+      setFormData({ firstName: "", lastName: "", email: "", message: "" });
+      setFieldErrors({});
+    } else if (!emailSuccess && dbSuccess) {
+      setSuccessMsg("✅ Message saved to MongoDB database!");
+      setErrorMsg(`⚠️ Notice: Email delivery failed: ${emailError}`);
+      setFormData({ firstName: "", lastName: "", email: "", message: "" });
+      setFieldErrors({});
+    } else {
+      setErrorMsg(`❌ Failed to send message.\nEmailJS: ${emailError || 'Failed'}\nDatabase: ${dbError || 'Failed'}`);
     }
   };
 
@@ -248,7 +300,7 @@ export default function Contact() {
           </form>
 
           <div className="contact-links">
-            <a
+            {/* <a 
               href="mailto:ileriunique40@gmail.com"
               className="contact-chip"
             >
@@ -356,7 +408,7 @@ export default function Contact() {
                 />
               </svg>
               Instagram
-            </a>
+            </a> */}
           </div>
         </div>
       </div>

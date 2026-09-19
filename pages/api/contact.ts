@@ -1,21 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import dns from 'dns';
 import dbConnect from '../../lib/mongodb';
 import Contact from '../../models/Contact';
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 type ResponseData =
   | {
-      success: boolean;
-      message: string;
-      data?: unknown;
-    }
+    success: boolean;
+    message: string;
+    data?: unknown;
+  }
   | {
-      success: boolean;
-      count?: number;
-      data?: unknown;
-      error?: string;
-    };
+    success: boolean;
+    count?: number;
+    data?: unknown;
+    error?: string;
+  };
 
 export default async function handler(
   req: NextApiRequest,
@@ -79,7 +80,24 @@ export default async function handler(
       if (!emailRegex.test(email.trim())) {
         return res.status(400).json({
           success: false,
-          error: 'Please provide a valid email address.',
+          error: 'Invalid email address',
+        });
+      }
+
+      // Verify that the email domain actually exists and has mail servers (MX records)
+      const emailDomain = email.trim().split('@')[1];
+      try {
+        const mx = await dns.promises.resolveMx(emailDomain);
+        if (!mx || mx.length === 0) {
+          return res.status(400).json({
+            success: false,
+            error: 'Invalid email address',
+          });
+        }
+      } catch {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid email address',
         });
       }
 
@@ -115,9 +133,17 @@ export default async function handler(
       });
     } catch (error: any) {
       console.error('Contact submission error:', error);
+      const isIpError =
+        error?.name === 'MongooseServerSelectionError' ||
+        (typeof error?.message === 'string' &&
+          (error.message.includes('whitelist') ||
+            error.message.includes('Could not connect to any servers')));
+
       return res.status(500).json({
         success: false,
-        error: error?.message || 'An unexpected error occurred while saving to MongoDB. Please try again later.',
+        error: isIpError
+          ? 'MongoDB connection failed: Your IP address is not whitelisted in MongoDB Atlas. Go to cloud.mongodb.com -> Network Access -> Add IP Address -> "Allow Access from Anywhere" (0.0.0.0/0).'
+          : error?.message || 'An unexpected error occurred while saving to MongoDB. Please try again later.',
       });
     }
   }

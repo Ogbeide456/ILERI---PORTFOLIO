@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <p className="footer-logo">
-              <a href="#header" className="nav-logo">
+              <a href="./" className="nav-logo">
                 OS<span>.</span>
               </a>
             </p>
