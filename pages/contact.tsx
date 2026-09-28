@@ -15,8 +15,10 @@ export default function ContactPage() {
       </Head>
 
       <Navbar />
-      <main style={{ paddingTop: '110px' }}>
-        <ContactSection />
+      <main>
+        <div style={{ paddingTop: 'var(--nav-height)' }}>
+          <ContactSection />
+        </div>
       </main>
       <Footer />
     </>

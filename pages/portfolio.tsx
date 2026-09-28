@@ -15,8 +15,10 @@ export default function PortfolioPage() {
       </Head>
 
       <Navbar />
-      <main style={{ paddingTop: '110px' }}>
-        <PortfolioSection />
+      <main>
+        <div style={{ paddingTop: 'var(--nav-height)' }}>
+          <PortfolioSection />
+        </div>
       </main>
       <Footer />
     </>

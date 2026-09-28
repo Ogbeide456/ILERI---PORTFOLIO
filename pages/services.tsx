@@ -15,8 +15,10 @@ export default function ServicesPage() {
       </Head>
 
       <Navbar />
-      <main style={{ paddingTop: '110px' }}>
-        <ServicesSection />
+      <main>
+        <div style={{ paddingTop: 'var(--nav-height)' }}>
+          <ServicesSection />
+        </div>
       </main>
       <Footer />
     </>

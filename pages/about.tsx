@@ -15,8 +15,10 @@ export default function AboutPage() {
       </Head>
 
       <Navbar />
-      <main style={{ paddingTop: '110px' }}>
-        <AboutSection />
+      <main>
+        <div style={{ paddingTop: 'var(--nav-height)' }}>
+          <AboutSection />
+        </div>
       </main>
       <Footer />
     </>
