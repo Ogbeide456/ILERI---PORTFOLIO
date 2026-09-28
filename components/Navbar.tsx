@@ -13,10 +13,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close menu when a nav link is clicked
   const handleLinkClick = () => setMenuOpen(false);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -25,11 +23,10 @@ export default function Navbar() {
   return (
     <header className={`navbar${scrolled ? ' scrolled' : ''}${menuOpen ? ' menu-open' : ''}`}>
       <div className="container">
-        <a href="./" className="nav-logo">
+        <a href="/" className="nav-logo">
           OS<span>.</span>
         </a>
 
-        {/* Hamburger button — visible on mobile */}
         <button
           className={`hamburger${menuOpen ? ' active' : ''}`}
           onClick={() => setMenuOpen((v) => !v)}
@@ -43,11 +40,11 @@ export default function Navbar() {
 
         <nav className={menuOpen ? 'nav-open' : ''}>
           <ul>
-            <li><a href="#header" onClick={handleLinkClick}>HOME</a></li>
-            <li><a href="#about" onClick={handleLinkClick}>ABOUT ME</a></li>
-            <li><a href="#services" onClick={handleLinkClick}>SERVICES</a></li>
-            <li><a href="#portfolio" onClick={handleLinkClick}>PORTFOLIO</a></li>
-            <li><a href="#contact" onClick={handleLinkClick}>CONTACT</a></li>
+            <li><a href="/" onClick={handleLinkClick}>HOME</a></li>
+            <li><a href="/about" onClick={handleLinkClick}>ABOUT ME</a></li>
+            <li><a href="/services" onClick={handleLinkClick}>SERVICES</a></li>
+            <li><a href="/portfolio" onClick={handleLinkClick}>PORTFOLIO</a></li>
+            <li><a href="/contact" onClick={handleLinkClick}>CONTACT</a></li>
             <li>
               <button
                 className="theme-toggle"
@@ -55,7 +52,6 @@ export default function Navbar() {
                 aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
                 title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               >
-                {/* Sun icon — shown when in dark mode (click to go light) */}
                 <svg
                   className={`theme-icon theme-icon-sun${theme === 'dark' ? ' active' : ''}`}
                   xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +76,6 @@ export default function Navbar() {
                   <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
 
-                {/* Moon icon — shown when in light mode (click to go dark) */}
                 <svg
                   className={`theme-icon theme-icon-moon${theme === 'light' ? ' active' : ''}`}
                   xmlns="http://www.w3.org/2000/svg"

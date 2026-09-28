@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ileri-portfolio2.vercel.app/sitemap.xml
