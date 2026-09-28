@@ -2,18 +2,16 @@ import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PortfolioSection from '../components/Portfolio';
+import RevealObserver from '../components/RevealObserver';
 
 export default function PortfolioPage() {
   return (
     <>
       <Head>
         <title>Portfolio | Ogbeide Samuel Ilerioluwakiye</title>
-        <meta
-          name="description"
-          content="Browse selected projects and digital products created by Ogbeide Samuel Ilerioluwakiye."
-        />
+        <meta name="description" content="Browse selected projects and digital products created by Ogbeide Samuel Ilerioluwakiye." />
       </Head>
-
+      <RevealObserver />
       <Navbar />
       <main>
         <div style={{ paddingTop: 'var(--nav-height)' }}>
