@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
+import MusicPlayer from './MusicPlayer';
 
 /*
- * The h1 is modelled as a list of "segments", each segment is either
- * plain text, a line-break, or a styled span.  We track a global
- * character counter and only render characters whose index < visibleCount.
+ * The hero heading is modelled as a list of "segments", each segment is either
+ * plain text, a line-break, or a styled span.
  *
- * Typing speed: one character every 450 ms (0.45 s).
+ * The typewriter cycles infinitely between heading variants:
+ * - Variant 1: Name and Nigeria intro
+ * - Variant 2: Crafting web experiences & clean code description
+ *
+ * Typing and backspacing speed: 0.03s (30ms) per character.
  */
 
 type Segment =
@@ -13,24 +17,67 @@ type Segment =
   | { type: 'br' }
   | { type: 'styled'; className: string; children: Segment[] };
 
-const segments: Segment[] = [
-  { type: 'text', value: "Hi, My name is " },
-  {
-    type: 'styled',
-    className: 'name-highlight',
-    children: [{ type: 'text', value: 'Ogbeide Samuel Ilerioluwakiye' }],
-  },
-  { type: 'br' },
-  { type: 'text', value: "and I\u2019m a Full-Stack Developer from " },
-  {
-    type: 'styled',
-    className: 'flag-ng',
-    children: [
-      { type: 'styled', className: 'gh', children: [{ type: 'text', value: 'Ni' }] },
-      { type: 'styled', className: 'jh', children: [{ type: 'text', value: 'ger' }] },
-      { type: 'styled', className: 'gh', children: [{ type: 'text', value: 'ia' }] },
-    ],
-  },
+// ─── Heading Cycling Variants ───
+const headingVariants: Segment[][] = [
+  // Variant 1: Name & Location Intro
+  [
+    { type: 'text', value: "Hi, My name is " },
+    {
+      type: 'styled',
+      className: 'name-highlight',
+      children: [{ type: 'text', value: 'Ogbeide Samuel Ilerioluwakiye' }],
+    },
+    { type: 'br' },
+    { type: 'text', value: "and I\u2019m a Full-Stack Developer from " },
+    {
+      type: 'styled',
+      className: 'flag-ng',
+      children: [
+        { type: 'styled', className: 'gh', children: [{ type: 'text', value: 'Ni' }] },
+        { type: 'styled', className: 'jh', children: [{ type: 'text', value: 'ger' }] },
+        { type: 'styled', className: 'gh', children: [{ type: 'text', value: 'ia' }] },
+      ],
+    },
+  ],
+  // Variant 2: Merged Description with Styled Highlight
+  [
+    { type: 'text', value: 'I craft ' },
+    {
+      type: 'styled',
+      className: 'name-highlight',
+      children: [{ type: 'text', value: 'beautiful, performant web experiences' }],
+    },
+    {
+      type: 'text',
+      value: ' using modern technologies. Passionate about clean code and great design.',
+    },
+  ],
+  // Variant 3: Client Outreach
+  [
+    { type: 'text', value: 'If you need a ' },
+    {
+      type: 'styled',
+      className: 'name-highlight',
+      children: [{ type: 'text', value: 'quality, aesthetic and scalable' }],
+    },
+    {
+      type: 'text',
+      value: ' website for your brand, business or yourself, Feel free to reach out to me',
+    },
+  ],
+  // Variant 4: Developer Collaboration
+  [
+    { type: 'text', value: 'For fellow developers or engineers like myself, let\u2019s collaborate and build ' },
+    {
+      type: 'styled',
+      className: 'name-highlight',
+      children: [{ type: 'text', value: 'amazing, effective and efficient' }],
+    },
+    {
+      type: 'text',
+      value: ' web solutions together',
+    },
+  ],
 ];
 
 /** Count total printable characters across all segments */
@@ -43,8 +90,6 @@ function countChars(segs: Segment[]): number {
   }
   return n;
 }
-
-const TOTAL_CHARS = countChars(segments);
 
 /**
  * Recursively render segments, slicing visible text according to a
@@ -94,20 +139,49 @@ function renderSegments(
 }
 
 export default function Hero() {
+  const [variantIndex, setVariantIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
+  const currentVariant = headingVariants[variantIndex];
+  const currentTotal = countChars(currentVariant);
+
+  // Cycling Typewriter & Backspace Effect
   useEffect(() => {
-    if (visibleCount >= TOTAL_CHARS) return;
+    let timer: NodeJS.Timeout;
 
-    const timer = setTimeout(() => {
-      setVisibleCount((c) => c + 1);
-    }, 150); // 0.15 seconds per character
+    if (!isDeleting) {
+      if (visibleCount < currentTotal) {
+        // Typing forward
+        timer = setTimeout(() => {
+          setVisibleCount((c) => c + 1);
+        }, 20); // 0.02 seconds per character
+      } else {
+        // Finished typing current variant, pause before backspacing
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 2200);
+      }
+    } else {
+      if (visibleCount > 0) {
+        // Backspacing character by character
+        timer = setTimeout(() => {
+          setVisibleCount((c) => c - 1);
+        }, 20); // 0.02 seconds per character
+      } else {
+        // Finished backspacing, brief pause, switch to next variant and type
+        timer = setTimeout(() => {
+          setIsDeleting(false);
+          setVariantIndex((prev) => (prev + 1) % headingVariants.length);
+        }, 400);
+      }
+    }
 
     return () => clearTimeout(timer);
-  }, [visibleCount]);
+  }, [visibleCount, isDeleting, variantIndex, currentTotal]);
 
   const offset = { current: 0 };
-  const rendered = renderSegments(segments, visibleCount, offset);
+  const rendered = renderSegments(currentVariant, visibleCount, offset);
 
   return (
     <section id="header">
@@ -116,6 +190,9 @@ export default function Hero() {
       <div className="hero-orb hero-orb-1" />
       <div className="hero-orb hero-orb-2" />
 
+      {/* Music player in header section */}
+      <MusicPlayer />
+
       <div className="container">
         <div className="header-text">
           <div className="badge">
@@ -123,17 +200,10 @@ export default function Hero() {
             Available for work
           </div>
 
-          <h1>
+          <h1 className="hero-typing-heading">
             {rendered}
-            {visibleCount < TOTAL_CHARS && (
-              <span className="typewriter-cursor" aria-hidden="true" />
-            )}
+            <span className="typewriter-cursor" aria-hidden="true" />
           </h1>
-
-          <p className="hero-desc">
-            I craft beautiful, performant web experiences using modern
-            technologies. Passionate about clean code and great design.
-          </p>
 
           <div className="hero-cta">
             <a href="#contact" className="btn-primary">

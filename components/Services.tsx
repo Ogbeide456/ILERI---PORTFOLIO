@@ -2,12 +2,12 @@ const services = [
   {
     icon: '🌐',
     title: 'Web Development & Design',
-    desc: 'Building responsive, performant websites and web apps using modern technologies like HTML, CSS, JavaScript, and React.',
+    desc: 'Building responsive, performant websites using modern technologies like HTML, CSS, JavaScript, Next.js, React.js, Node.js and many more.',
   },
   {
     icon: '🎨',
     title: 'Graphics Design',
-    desc: 'Creating visually stunning brand identities, marketing materials, and digital assets using CorelDRAW and design principles.',
+    desc: 'Creating visually stunning brand identities, marketing materials, and digital assets using apps like CorelDRAW, Cnava and Photoshop and design principles.',
   },
   {
     icon: '📐',
@@ -19,11 +19,11 @@ const services = [
     title: 'Data Analysis with Excel',
     desc: 'Cleaning, analyzing, and visualizing data using Microsoft Excel to help you make informed, data-driven decisions.',
   },
-  {
+  /*{
     icon: '📣',
     title: 'Advertisement',
     desc: 'Crafting compelling digital advertisement content and creatives that capture attention and drive meaningful engagement.',
-  },
+  },*/
 ];
 
 export default function Services() {

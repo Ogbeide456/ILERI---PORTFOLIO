@@ -3,7 +3,9 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import Stats from '../components/Stats';
 import About from '../components/About';
+import ToolsCarousel from '../components/ToolsCarousel';
 import Services from '../components/Services';
 import Portfolio from '../components/Portfolio';
 import Contact from '../components/Contact';
@@ -32,7 +34,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Ogbeide Samuel Ilerioluwakiye — Front-End Developer</title>
+        <title>Ogbeide Samuel Ilerioluwakiye Portfolio Website— Full-Stack Software Developer</title>
         <meta
           name="description"
           content="Portfolio of Ogbeide Samuel Ilerioluwakiye — Front-End Developer from Nigeria specialising in React, Web Design, and Data Analysis."
@@ -44,7 +46,9 @@ const Home: NextPage = () => {
       <Navbar />
       <main>
         <Hero />
+        <Stats />
         <About />
+        <ToolsCarousel />
         <Services />
         <Portfolio />
         <Contact />

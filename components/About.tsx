@@ -91,6 +91,15 @@ const icons = {
       <path d="M12 2.5v19c2.3-1.6 4.5-4.3 4.5-8 0-4.5-3-8.5-4.5-11z" fill="#499D4A" />
     </svg>
   ),
+  sql: (
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true">
+      <ellipse cx="12" cy="5" rx="8.5" ry="3" fill="#00758F" />
+      <path d="M3.5 5v5.5c0 1.66 3.81 3 8.5 3s8.5-1.34 8.5-3V5" stroke="#00758F" strokeWidth="1.2" fill="#005B70" />
+      <path d="M3.5 10.5v5.5c0 1.66 3.81 3 8.5 3s8.5-1.34 8.5-3v-5.5" stroke="#00758F" strokeWidth="1.2" fill="#004354" />
+      <path d="M3.5 16v3c0 1.66 3.81 3 8.5 3s8.5-1.34 8.5-3v-3" stroke="#00758F" strokeWidth="1.2" fill="#002D38" />
+      <text x="12" y="14" fill="#ffffff" fontSize="6" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">SQL</text>
+    </svg>
+  ),
   python: (
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true">
       <path d="M11.9 2c-3.1 0-5 .6-5 2.5v1.9h5.1v.6H4.8C3.1 7 2 8.4 2 10.9c0 2.3 1.2 3.8 3.1 3.8h1.2v-1.7c0-1.8 1.5-3.3 3.3-3.3h5.1c1.5 0 2.6-.9 2.6-2.4V4.5C17.3 2.6 15.2 2 11.9 2zM9.4 3.7a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6z" fill="#3776AB" />
@@ -209,7 +218,8 @@ const tabContent: Record<TabId, TabItem[]> = {
       title: 'Database',
       subtitle: (
         <span className="skill-tools-wrap">
-          <Tool name="MongoDB" icon={icons.mongo} />
+          <Tool name="MongoDB" icon={icons.mongo} />,{' '}
+          <Tool name="SQL" icon={icons.sql} />
         </span>
       ),
     },
@@ -268,15 +278,58 @@ const tabContent: Record<TabId, TabItem[]> = {
     { title: 'Supply Chain Management', subtitle: 'Logistics, Vendor Management, Production & Maintenance' },
   ],
   experience: [
-    { title: '2022 – 2024', subtitle: 'Web Design & Development' },
-    { title: 'Mar 2025 – Apr 2025', subtitle: 'Front End Development at Richfill MultiServices Enterprises' },
-    { title: 'Apr 2025 – Sept 2025', subtitle: 'Supply Chain Management at Seplat Energy Plc' },
-    { title: 'Dec 2023 – Mar 2024', subtitle: 'Prompt Engineering: Introduction to LLMs by OBTranslate' },
+    //{ title: '2022 – 2024', subtitle: 'Web Design & Development' },
+    {
+      title: 'Mar 2025 – Apr 2025',
+      subtitle: (
+        <span className="org-inline">
+          Front End Development at
+          <img src="/richfill logo.jpeg" alt="Richfill logo" className="school-logo-icon" />
+          Richfill MultiServices Enterprises
+        </span>
+      ),
+    },
+    {
+      title: 'Apr 2025 – Sept 2025',
+      subtitle: (
+        <span className="org-inline">
+          Supply Chain Management at
+          <img src="/seplatenergylogo.jfif" alt="Seplat Energy logo" className="school-logo-icon" />
+          Seplat Energy Plc
+        </span>
+      ),
+    },
+    // { title: 'Dec 2023 – Mar 2024', subtitle: 'Prompt Engineering: Introduction to LLMs by OBTranslate' },
   ],
   education: [
-    { title: '2022 – 2026', subtitle: 'B.Sc. Industrial Mathematics – Computer Science · Covenant University, Ota, Ogun State' },
-    { title: '2016 – 2022', subtitle: 'Deeper Life High School, Lagos Campus, Mowe, Ogun State' },
-    { title: '2012 – 2016', subtitle: 'Edidot School, Badore, Lagos' },
+    {
+      title: '2022 – 2026',
+      subtitle: (
+        <span className="org-inline">
+          B.Sc. Industrial Mathematics – Computer Science at
+          <img src="/culogo.jpg" alt="Covenant University logo" className="school-logo-icon" />
+          Covenant University, Ota, Ogun State
+        </span>
+      ),
+    },
+    {
+      title: '2016 – 2022',
+      subtitle: (
+        <span className="org-inline">
+          <img src="/dlhslogo.png" alt="Deeper Life High School logo" className="school-logo-icon" />
+          Deeper Life High School, Lagos Campus, Mowe, Ogun State
+        </span>
+      ),
+    },
+    {
+      title: '2012 – 2016',
+      subtitle: (
+        <span className="org-inline">
+          <img src="/edidotlogo.jpg" alt="Edidot School logo" className="school-logo-icon" />
+          Edidot School, Badore, Lagos
+        </span>
+      ),
+    },
   ],
   certifications: [
     {
@@ -296,7 +349,7 @@ const tabContent: Record<TabId, TabItem[]> = {
       subtitle: (
         <span className="cert-subtitle">
           <img
-            src="https://media.licdn.com/dms/image/v2/D4E2DAQExo7zH55DyVQ/profile-treasury-image-shrink_800_800/B4EZ_7mjslKwAI-/0/1786632616980?e=1789686000&v=beta&t=qOqJoGAXF0jj81Z8qYQLlSYKObGlHx8kRFR7HgpgfUE"
+            src="./mongodbcert.jfif"
             alt="MongoDB- The Complete MongoDB Developers Course Certificate"
             className="cert-img"
           />

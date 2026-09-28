@@ -16,7 +16,7 @@ const projects: Project[] = [
   {
     emoji: '',
     image:
-      'https://media.licdn.com/dms/image/v2/D4E2DAQFnN3DW779NAQ/profile-treasury-image-shrink_1920_1920/B4EZ4dK2JoG8Ac-/0/1778605843485?e=1789387200&v=beta&t=EDbTro8hktqxpXMmjY2EIGynOKh31UkQ0bBw68EZDAo',
+      '/property-plug.jfif',
     title: 'Property Plug Project',
     desc: 'This is a platform that allows users to either buy, sell, or rent out real estate properties depending on their role as a landlord, tenant, or general user.',
     tags: ['HTML', 'CSS', 'JavaScript'],
@@ -34,13 +34,14 @@ const projects: Project[] = [
   },
   {
     emoji: '',
+    image: './emotion-detector.jfif',
     title: 'Emotion Detector Web App',
-    desc: 'A pure CSS/JS animated flame effect demonstrating creative front-end animation techniques.',
-    tags: ['HTML', 'CSS', 'JavaScript'],
-    link: '../flameanimation.html',
-    sourceCode: '', // ← Paste GitHub repo URL here
+    desc: 'A machine-learning driven we application designed to identify human emotions from facial images using a trained deep learning model.The application allows a user to upload an image, processes the image, and predicts the most likely emotion from a set of standard categories such as Angry, Disgust, Fear, Happy, Sad, Surprise, and Neutral..',
+    tags: ['Python', 'Flask', 'Scikit-Learn', 'NumPy', 'Pandas', 'Joblib', 'Plotly', 'Streamlit', 'HTML', 'CSS'],
+    link: 'https://emotion-detector-ogbeide-samuel-22cd032172-qxyfzhp8x2tujwqg64n.streamlit.app/',
+    sourceCode: 'https://github.com/Ogbeide456/EMOTION-DETECTOR-OGBEIDE-SAMUEL-22CD032172', // ← Paste GitHub repo URL here
   },
-  {
+  /*{
     emoji: '📍',
     title: 'Geolocation App',
     desc: "A browser geolocation app that retrieves and displays the user's current coordinates.",
@@ -63,7 +64,7 @@ const projects: Project[] = [
     tags: ['HTML', 'CSS'],
     link: '../softwaredev.html',
     sourceCode: '', // ← Paste GitHub repo URL here
-  },
+  }, */
 ];
 
 function ProjectMedia({ project }: { project: Project }) {
