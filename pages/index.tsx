@@ -40,8 +40,8 @@ const Home: NextPage = () => {
           content="Portfolio of Ogbeide Samuel Ilerioluwakiye — Front-End Developer from Nigeria specialising in React, Web Design, and Data Analysis."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="google-site-verification" content="xwfG0-IYArqG7CIG9X2Ab5E9u4EjgFi5X4OqUp9cKrE" />
         <link rel="icon" href="/favicon.ico" />
+         <meta name="google-site-verification" content="xwfG0-IYArqG7CIG9X2Ab5E9u4EjgFi5X4OqUp9cKrE" />
       </Head>
 
       <Navbar />
