@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import MusicPlayer from './MusicPlayer';
 
 /*
  * The hero heading is modelled as a list of "segments", each segment is either
@@ -189,9 +188,6 @@ export default function Hero() {
       <div className="hero-grid" />
       <div className="hero-orb hero-orb-1" />
       <div className="hero-orb hero-orb-2" />
-
-      {/* Music player in header section */}
-      <MusicPlayer />
 
       <div className="container">
         <div className="header-text">
