@@ -148,7 +148,9 @@ export default function ToolsCarousel() {
           {/* First set of logos */}
           {toolsList.map((tool, index) => (
             <div className="carousel-item" key={`orig-${index}`}>
-              <span className="carousel-icon">{tool.icon}</span>
+              <span className={`carousel-icon carousel-icon--${tool.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
+                {tool.icon}
+              </span>
               <span className="carousel-name">{tool.name}</span>
             </div>
           ))}
@@ -156,7 +158,9 @@ export default function ToolsCarousel() {
           {/* Duplicated set for seamless infinite scroll */}
           {toolsList.map((tool, index) => (
             <div className="carousel-item" key={`dup-${index}`} aria-hidden="true">
-              <span className="carousel-icon">{tool.icon}</span>
+              <span className={`carousel-icon carousel-icon--${tool.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
+                {tool.icon}
+              </span>
               <span className="carousel-name">{tool.name}</span>
             </div>
           ))}

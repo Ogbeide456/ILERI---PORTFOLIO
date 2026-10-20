@@ -22,6 +22,8 @@
   --bg-primary2: #a5a9b1;
   --bg-primary3: #f0f2f5;
   --bg-secondary2: #d8e2ef;
+  --snow-color: rgba(0, 208, 132, 0.34);
+  --carousel-background: #070b16;
 }
 
 html {
@@ -102,6 +104,8 @@ body {
   --text-secondary: #4a5568;
   --text-muted: #8892b0;
   --border: rgba(0, 0, 0, 0.1);
+  --snow-color: rgba(37, 99, 235, 0.28);
+  --carousel-background: #b2bfd2;
 }
 
 /* ── Body background ── */
@@ -3004,4 +3008,207 @@ footer span {
   .music-player__spotify-text {
     display: none;
   }
-}
+}
+
+
+.hero-image-wrapper {
+  position: absolute;
+  top: calc(var(--nav-height) + 80px);
+  right: max(6%, calc(50vw - 600px));
+  width: min(34vw, 440px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.app-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.snowfall {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.snowfall-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-repeat: repeat;
+  animation: snowfall 24s linear infinite;
+}
+
+.snowfall-layer--slow {
+  background-image:
+    radial-gradient(circle, var(--snow-color) 1.4px, transparent 2px),
+    radial-gradient(circle, var(--snow-color) 1px, transparent 1.8px);
+  background-size: 110px 110px, 170px 170px;
+  animation-duration: 32s;
+}
+
+.snowfall-layer--medium {
+  background-image:
+    radial-gradient(circle, var(--snow-color) 1.2px, transparent 1.9px),
+    radial-gradient(circle, var(--snow-color) 0.9px, transparent 1.7px);
+  background-size: 78px 78px, 130px 130px;
+  animation-duration: 22s;
+  animation-delay: -11s;
+  opacity: 0.7;
+}
+
+.snowfall-layer--fast {
+  background-image:
+    radial-gradient(circle, var(--snow-color) 1px, transparent 1.8px),
+    radial-gradient(circle, var(--snow-color) 0.8px, transparent 1.6px);
+  background-size: 58px 58px, 95px 95px;
+  animation-duration: 16s;
+  animation-delay: -5s;
+  opacity: 0.5;
+}
+
+@keyframes snowfall {
+  to {
+    background-position: 8vw 100vh;
+  }
+}
+
+.carousel-wrapper {
+  background: var(--carousel-background);
+  border-block: 1px solid var(--border);
+}
+
+.carousel-icon.carousel-icon--next-js {
+  color: #ffffff;
+}
+
+.carousel-icon.carousel-icon--typescript {
+  color: #3178c6;
+}
+
+.carousel-icon.carousel-icon--react-js {
+  color: #61dafb;
+}
+
+.carousel-icon.carousel-icon--html {
+  color: #e34f26;
+}
+
+.carousel-icon.carousel-icon--mongodb {
+  color: #47a248;
+}
+
+.carousel-icon.carousel-icon--css {
+  color: #1572b6;
+}
+
+.carousel-icon.carousel-icon--javascript {
+  color: #f7df1e;
+}
+
+.carousel-icon.carousel-icon--jsx {
+  color: #61dafb;
+}
+
+.carousel-icon.carousel-icon--node-js {
+  color: #339933;
+}
+
+.carousel-icon.carousel-icon--express-js {
+  color: #ffffff;
+}
+
+.carousel-icon.carousel-icon--emailjs {
+  color: #f15a24;
+}
+
+.carousel-icon.carousel-icon--postman {
+  color: #ff6c37;
+}
+
+.carousel-icon.carousel-icon--git {
+  color: #f05032;
+}
+
+.carousel-icon.carousel-icon--github,
+.carousel-icon.carousel-icon--vercel {
+  color: #ffffff;
+}
+
+[data-theme="light"] .carousel-icon.carousel-icon--next-js,
+[data-theme="light"] .carousel-icon.carousel-icon--express-js,
+[data-theme="light"] .carousel-icon.carousel-icon--github,
+[data-theme="light"] .carousel-icon.carousel-icon--vercel {
+  color: #171717;
+}
+
+.contact-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  width: min(100%, 1000px);
+}
+
+.contact-chip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  width: auto;
+  min-height: 150px;
+  padding: 24px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: linear-gradient(145deg, var(--bg-card), transparent);
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.contact-chip svg {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.contact-chip:hover {
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+}
+
+@media (max-width: 600px) {
+  .contact-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .contact-chip {
+    width: 100%;
+    min-height: 128px;
+    font-size: 14px;
+  }
+}
+
+[data-theme="light"] .snowfall {
+  opacity: 0.65;
+}
+
+[data-theme="light"] .contact-chip {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.46));
+  box-shadow: 0 12px 28px rgba(30, 41, 59, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snowfall-layer {
+    animation: none;
+    top: 0;
+  }

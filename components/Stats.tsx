@@ -40,7 +40,7 @@ const STATS_DATA: StatConfig[] = [
 //This is the function for the stats section
 export default function Stats() {
   const sectionRef = useRef<HTMLElement | null>(null); //This is the ref for the stats section
-  const [hasStarted, setHasStarted] = useState(false); //This is the state for the stats section
+  const [isVisible, setIsVisible] = useState(false); //This is the state for the stats section
   const [displayValues, setDisplayValues] = useState<string[]>(['00', '00', '00']); //This is the state for the stats section
 
   //This is the effect for the stats section
@@ -48,9 +48,7 @@ export default function Stats() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasStarted) {
-            setHasStarted(true);
-          }
+          setIsVisible(entry.isIntersecting);
         });
       },
       { threshold: 0.25 } //This is the threshold for the stats section // The threshold is set to 0.25, which means that the stats section will be animated when it is 25% visible in the viewport
@@ -62,15 +60,14 @@ export default function Stats() {
       observer.observe(currentElem); //This is the observer for the stats section
     }
 
-    return () => {
-      if (currentElem) {
-        observer.unobserve(currentElem);
-      }
-    };
-  }, [hasStarted]);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
-    if (!hasStarted) return;
+    if (!isVisible) {
+      setDisplayValues(['00', '00', '00']);
+      return;
+    }
 
     const duration = 2000; // 2 seconds animation duration
     const startTime = performance.now();
@@ -123,7 +120,7 @@ export default function Stats() {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [hasStarted]);
+  }, [isVisible]);
 
   return (
     <section id="stats" ref={sectionRef} className="stats-section reveal">
