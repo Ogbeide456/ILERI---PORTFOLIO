@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 /*
- * The stats section is a section that displays the number of people who have visited the website, the number of tools, technologies and packages used in building this website, and the number of hours spent on building this project.
- * 
- * It is a section that displays the number of people who have visited the website, the number of tools, technologies and packages used in building this website, and the number of hours spent on building this project.
+ * Stats component displaying key portfolio metrics:
+ * - People visited this website
+ * - Tools, technologies & packages used
+ * - Hours spent building projects
+ *
+ * Restructured into a clean horizontal row with dividers matching the modern reference layout.
  */
 interface StatConfig {
   id: number;
   targetNum: number;
   suffix: string;
   isK: boolean;
-  text: string;
+  line1: string;
+  line2: string;
 }
-//This is the interface for the stats section
 
 const STATS_DATA: StatConfig[] = [
   {
@@ -20,30 +23,32 @@ const STATS_DATA: StatConfig[] = [
     targetNum: 30,
     suffix: '+',
     isK: false,
-    text: 'People have visited this website',
+    line1: 'People',
+    line2: 'Visited',
   },
   {
     id: 2,
     targetNum: 50,
     suffix: '+',
     isK: false,
-    text: 'Tools, technologies and packages were used in building this website',
+    line1: 'Tools &',
+    line2: 'Technologies',
   },
   {
     id: 3,
     targetNum: 5,
     suffix: 'k+',
     isK: true,
-    text: 'Hours was spent on building this project',
+    line1: 'Hours',
+    line2: 'Spent',
   },
 ];
-//This is the function for the stats section
-export default function Stats() {
-  const sectionRef = useRef<HTMLElement | null>(null); //This is the ref for the stats section
-  const [isVisible, setIsVisible] = useState(false); //This is the state for the stats section
-  const [displayValues, setDisplayValues] = useState<string[]>(['00', '00', '00']); //This is the state for the stats section
 
-  //This is the effect for the stats section
+export default function Stats() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [displayValues, setDisplayValues] = useState<string[]>(['00', '00', '00']);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -51,13 +56,12 @@ export default function Stats() {
           setIsVisible(entry.isIntersecting);
         });
       },
-      { threshold: 0.25 } //This is the threshold for the stats section // The threshold is set to 0.25, which means that the stats section will be animated when it is 25% visible in the viewport
+      { threshold: 0.25 }
     );
 
-    //This is the observer for the stats section
-    const currentElem = sectionRef.current; //This is the ref for the stats section
+    const currentElem = sectionRef.current;
     if (currentElem) {
-      observer.observe(currentElem); //This is the observer for the stats section
+      observer.observe(currentElem);
     }
 
     return () => observer.disconnect();
@@ -69,15 +73,13 @@ export default function Stats() {
       return;
     }
 
-    const duration = 2000; // 2 seconds animation duration
+    const duration = 2000;
     const startTime = performance.now();
     let animationFrameId: number;
 
     const updateCounters = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-
-      // Smooth easeOutExpo / easeOutCubic curve for a natural deceleration
       const ease = 1 - Math.pow(1 - progress, 3);
 
       const newValues = STATS_DATA.map((item) => {
@@ -86,19 +88,13 @@ export default function Stats() {
         }
 
         if (item.isK) {
-          // For 5k+, count smoothly from 0.0 up to 5 with 1 decimal place, then append k+
           const currentVal = ease * item.targetNum;
-          if (currentVal < 0.1) {
-            return '00';
-          }
+          if (currentVal < 0.1) return '00';
           const formatted = currentVal.toFixed(1);
           return `${formatted.endsWith('.0') ? parseInt(formatted, 10) : formatted}k+`;
         } else {
-          // For integer targets (30+, 50+)
           const currentVal = Math.floor(ease * item.targetNum);
-          if (currentVal === 0) {
-            return '00';
-          }
+          if (currentVal === 0) return '00';
           return `${currentVal}+`;
         }
       });
@@ -108,7 +104,6 @@ export default function Stats() {
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(updateCounters);
       } else {
-        // Guarantee exact target strings at completion
         setDisplayValues(STATS_DATA.map((item) => `${item.targetNum}${item.suffix}`));
       }
     };
@@ -123,17 +118,19 @@ export default function Stats() {
   }, [isVisible]);
 
   return (
-    <section id="stats" ref={sectionRef} className="stats-section reveal">
-      <div className="container">
-        <div className="stats-wrapper">
-          {STATS_DATA.map((stat, index) => (
-            <div key={stat.id} className="stat-card">
-              <span className="stat-number">{displayValues[index]}</span>
-              <p className="stat-text">{stat.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+    <div id="stats" ref={sectionRef} className="hero-stats-row" aria-label="Portfolio statistics">
+      {STATS_DATA.map((stat, index) => (
+        <React.Fragment key={stat.id}>
+          {index > 0 && <div className="hero-stat-divider" aria-hidden="true" />}
+          <div className="hero-stat-item">
+            <span className="hero-stat-number">{displayValues[index]}</span>
+            <span className="hero-stat-label">
+              <span className="hero-stat-line">{stat.line1}</span>
+              <span className="hero-stat-line">{stat.line2}</span>
+            </span>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
   );
 }

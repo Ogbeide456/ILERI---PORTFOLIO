@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import Stats from '../components/Stats';
 import About from '../components/About';
 import ToolsCarousel from '../components/ToolsCarousel';
 import Services from '../components/Services';
@@ -47,7 +46,6 @@ const Home: NextPage = () => {
       <Navbar />
       <main>
         <Hero />
-        <Stats />
         <About />
         <ToolsCarousel />
         <Services />
