@@ -147,6 +147,14 @@ export default function Hero() {
 
   const currentVariant = headingVariants[variantIndex];
   const currentTotal = countChars(currentVariant);
+  const headingReserves = headingVariants.map((variant, index) => {
+    const reserveOffset = { current: 0 };
+    return (
+      <span className="hero-heading-reserve-variant" key={index}>
+        {renderSegments(variant, countChars(variant), reserveOffset)}
+      </span>
+    );
+  });
 
   // Cycling Typewriter & Backspace Effect
   useEffect(() => {
@@ -203,8 +211,13 @@ export default function Hero() {
           </div>
 
           <h1 className="hero-typing-heading">
-            {rendered}
-            <span className="typewriter-cursor" aria-hidden="true" />
+            <span className="hero-heading-reserve" aria-hidden="true">
+              {headingReserves}
+            </span>
+            <span className="hero-heading-current">
+              {rendered}
+              <span className="typewriter-cursor" aria-hidden="true" />
+            </span>
           </h1>
 
           <div className="hero-cta">

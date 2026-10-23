@@ -300,7 +300,7 @@ export default function Contact() {
           </form>
 
           <div className="contact-links">
-            {/* <a 
+            <a
               href="mailto:ileriunique40@gmail.com"
               className="contact-chip"
             >
@@ -408,7 +408,7 @@ export default function Contact() {
                 />
               </svg>
               Instagram
-            </a> */}
+            </a>
           </div>
         </div>
       </div>

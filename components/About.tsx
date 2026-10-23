@@ -235,10 +235,10 @@ const tabContent: Record<TabId, TabItem[]> = {
       subtitle: (
         <span className="skill-tools-wrap">
           <Tool name="Python" icon={icons.python} />,{' '}
-          <Tool name="C++" icon={icons.cpp} />,{' '}
-          <Tool name="C#" icon={icons.csharp} />,{' '}
-          <Tool name="Java" icon={icons.java} />,{' '}
-          <Tool name="Visual Basic" icon={icons.vb} />,{' '}
+          <Tool name="C++ (Intermediate — mid-level point)" icon={icons.cpp} />,{' '}
+          <Tool name="C# (Intermediate — lowest point)" icon={icons.csharp} />,{' '}
+          <Tool name="Java (Intermediate — mid-level point)" icon={icons.java} />,{' '}
+          <Tool name="Visual Basic (Intermediate — highest point)" icon={icons.vb} />,{' '}
           <Tool name="JavaScript (Expert)" icon={icons.js} />
         </span>
       ),
