@@ -164,6 +164,13 @@ const icons = {
       <path d="M12.5 7.5a4.5 4.5 0 0 0-4.5 4.5c0 3 2.5 4.5 4.5 4.5 2 0 3.5-1 4-2.5l-1.5-.5c-.3 1-1.2 1.5-2.5 1.5-1.5 0-3-1-3-3s1.5-3 3-3c1 0 2 .5 2.3 1.2l1.5-.7c-.6-1.3-2-2-3.8-2z" fill="#fff" />
     </svg>
   ),
+  capcut: (
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" fill="#0F172A" />
+      <path d="M7.5 8.2h4.7c2 0 3.3 1.1 3.3 2.8 0 1.9-1.4 3.1-3.5 3.1H9.8v2.1H7.5V8.2Zm2.3 2.4v2.3h2.1c.8 0 1.4-.4 1.4-1.2 0-.7-.6-1.1-1.4-1.1H9.8Z" fill="#FAF5FF" />
+      <path d="M14.8 8.2h2.7v7.6h-2.7V8.2Z" fill="#6D28D9" />
+    </svg>
+  ),
   photoshop: (
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true">
       <rect width="24" height="24" rx="4" fill="#001E36" stroke="#31A8FF" strokeWidth="0.8" />
@@ -224,16 +231,23 @@ const tabContent: Record<TabId, TabItem[]> = {
       ),
     },
     {
-      title: 'Programming',
+      title: 'Programmming',
       subtitle: (
         <span className="skill-tools-wrap">
           <Tool name="Python" icon={icons.python} />,{' '}
-          <Tool name="JavaScript" icon={icons.js} />,{' '}
-          <Tool name="C" icon={icons.c} />,{' '}
           <Tool name="C++" icon={icons.cpp} />,{' '}
           <Tool name="C#" icon={icons.csharp} />,{' '}
           <Tool name="Java" icon={icons.java} />,{' '}
-          <Tool name="Visual BASIC" icon={icons.vb} />
+          <Tool name="Visual Basic" icon={icons.vb} />,{' '}
+          <Tool name="JavaScript (Expert)" icon={icons.js} />
+        </span>
+      ),
+    },
+    {
+      title: 'Tools & Others',
+      subtitle: (
+        <span className="skill-tools-wrap">
+          <Tool name="CapCut" icon={icons.capcut} /> — Advanced (83%)
         </span>
       ),
     },

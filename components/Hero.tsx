@@ -143,6 +143,8 @@ export default function Hero() {
   const [visibleCount, setVisibleCount] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const techStack = ['Next.js', 'React.js', 'TypeScript', 'MongoDB', 'Node.js', 'Express.js'];
+
   const currentVariant = headingVariants[variantIndex];
   const currentTotal = countChars(currentVariant);
 
@@ -213,7 +215,38 @@ export default function Hero() {
               View my work
             </a>
           </div>
+
+          <div className="hero-tech-dock" aria-label="Core technology stack">
+            {techStack.map((item) => (
+              <span className="hero-tech-pill" key={item}>
+                <span aria-hidden="true" />
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
+      </div>
+
+      <div className="snowfall-layer" aria-hidden="true">
+        {Array.from({ length: 22 }, (_, index) => ({
+          left: `${(index * 7.1 + 4) % 100}%`,
+          animationDelay: `${(index * 0.55).toFixed(2)}s`,
+          animationDuration: `${8 + (index % 6)}s`,
+          opacity: index % 3 === 0 ? 0.9 : 0.65,
+          scale: 0.5 + (index % 5) * 0.2,
+        })).map((flake, index) => (
+          <span
+            key={index}
+            className="snowflake"
+            style={{
+              left: flake.left,
+              animationDelay: flake.animationDelay,
+              animationDuration: flake.animationDuration,
+              opacity: flake.opacity,
+              transform: `scale(${flake.scale})`,
+            }}
+          />
+        ))}
       </div>
     </section>
   );
