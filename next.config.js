@@ -2,10 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Enable Turbopack — Next.js's Rust-based bundler.
-  // It's significantly faster than Webpack, especially on slow/indexed filesystems.
-  // This replaces the old "experimental.turbo" flag (stable in Next.js 15+).
-  turbopack: {},
+  // Keep Turbopack's file watcher scoped to this app instead of the drive root.
+  turbopack: {
+    root: __dirname,
+  },
 
   // Reduce the amount of work done during dev by skipping type-checking
   // in the build pipeline (rely on your editor/IDE for type errors instead).

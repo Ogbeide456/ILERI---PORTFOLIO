@@ -14,7 +14,7 @@ export default function PortfolioPage() {
       <RevealObserver />
       <Navbar />
       <main>
-        <div style={{ paddingTop: 'var(--nav-height)' }}>
+        <div style={{ paddingTop: 'var(--header-offset)' }}>
           <PortfolioSection />
         </div>
       </main>

@@ -218,7 +218,7 @@ export default function Hero() {
               View my work
             </a>
             <a href="/about#more" className="btn-secondary">
-              View CV
+              View my CV
             </a>
           </div>
 

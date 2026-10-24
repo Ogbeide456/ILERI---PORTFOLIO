@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 /*
- * Stats component displaying key portfolio metrics:
- * - People visited this website
- * - Tools, technologies & packages used
- * - Hours spent building projects
+ * Stats component displaying experience, projects, and technologies used.
  *
  * Restructured into a clean horizontal row with dividers matching the modern reference layout.
  */
@@ -12,7 +9,6 @@ interface StatConfig {
   id: number;
   targetNum: number;
   suffix: string;
-  isK: boolean;
   line1: string;
   line2: string;
 }
@@ -20,27 +16,24 @@ interface StatConfig {
 const STATS_DATA: StatConfig[] = [
   {
     id: 1,
-    targetNum: 30,
+    targetNum: 4,
     suffix: '+',
-    isK: false,
-    line1: 'People',
-    line2: 'Visited',
+    line1: 'Years of',
+    line2: 'Experience',
   },
   {
     id: 2,
-    targetNum: 50,
+    targetNum: 5,
     suffix: '+',
-    isK: false,
-    line1: 'Tools &',
-    line2: 'Technologies',
+    line1: 'Projects',
+    line2: 'Built',
   },
   {
     id: 3,
-    targetNum: 5,
-    suffix: 'k+',
-    isK: true,
-    line1: 'Hours',
-    line2: 'Spent',
+    targetNum: 50,
+    suffix: '+',
+    line1: 'Software Tools &',
+    line2: 'Technologies Used',
   },
 ];
 
@@ -87,16 +80,9 @@ export default function Stats() {
           return `${item.targetNum}${item.suffix}`;
         }
 
-        if (item.isK) {
-          const currentVal = ease * item.targetNum;
-          if (currentVal < 0.1) return '00';
-          const formatted = currentVal.toFixed(1);
-          return `${formatted.endsWith('.0') ? parseInt(formatted, 10) : formatted}k+`;
-        } else {
-          const currentVal = Math.floor(ease * item.targetNum);
-          if (currentVal === 0) return '00';
-          return `${currentVal}+`;
-        }
+        const currentVal = Math.floor(ease * item.targetNum);
+        if (currentVal === 0) return '00';
+        return `${currentVal}${item.suffix}`;
       });
 
       setDisplayValues(newValues);

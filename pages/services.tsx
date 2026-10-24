@@ -14,7 +14,7 @@ export default function ServicesPage() {
       <RevealObserver />
       <Navbar />
       <main>
-        <div style={{ paddingTop: 'var(--nav-height)' }}>
+        <div style={{ paddingTop: 'var(--header-offset)' }}>
           <ServicesSection />
         </div>
       </main>

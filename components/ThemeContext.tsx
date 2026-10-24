@@ -19,21 +19,26 @@ export function useTheme() {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
+  const [isThemeInitialized, setIsThemeInitialized] = useState(false);
 
-  // On mount, read persisted theme from localStorage
+  // Restore the saved theme before persisting context changes.
   useEffect(() => {
     const stored = localStorage.getItem('portfolio-theme') as Theme | null;
     if (stored === 'light' || stored === 'dark') {
       setTheme(stored);
-      document.documentElement.setAttribute('data-theme', stored);
     }
+    setIsThemeInitialized(true);
   }, []);
 
-  // Whenever theme changes, update the DOM attribute and persist
+  // Do not persist the initial dark default before the saved value is restored.
   useEffect(() => {
+    if (!isThemeInitialized) {
+      return;
+    }
+
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('portfolio-theme', theme);
-  }, [theme]);
+  }, [theme, isThemeInitialized]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));

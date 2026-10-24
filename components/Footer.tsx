@@ -54,7 +54,7 @@ export default function Footer() {
           <div className="footer-col">
             <h4>Get in Touch</h4>
             <a href="mailto:ileriunique40@gmail.com">ileriunique40@gmail.com</a>
-            <a href="https://wa.me/2348128358675" target="_blank" rel="noopener noreferrer">WhatsApp: +234 812 835 8675</a>
+            <a href="https://wa.me/2348128358675" target="_blank" rel="noopener noreferrer">+234 812 835 8675</a>
           </div>
         </div>
 

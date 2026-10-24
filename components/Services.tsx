@@ -10,6 +10,11 @@ const services = [
     desc: 'Creating visually stunning brand identities, marketing materials, and digital assets using apps like CorelDRAW, Cnava and Photoshop and design principles.',
   },
   {
+    icon: '🎬',
+    title: 'Video Editing',
+    desc: 'Editing engaging videos with polished cuts, transitions, color correction, subtitles, and sound for social media and promotional content.',
+  },
+  {
     icon: '📐',
     title: 'Problem Solving – Maths & CS',
     desc: 'Providing solutions to complex mathematical and computer science problems with a structured, analytical approach.',
