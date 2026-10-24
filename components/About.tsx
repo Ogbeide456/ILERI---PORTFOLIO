@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, useRef, ReactNode } from 'react';
 
 type TabId = 'skills' | 'experience' | 'education' | 'certifications' | 'more';
 
@@ -370,6 +370,27 @@ export const CERTIFICATIONS_DATA: CertItem[] = [
 
 export default function About() {
   const [activeTab, setActiveTab] = useState<TabId>('skills');
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  const goToMore = () => {
+    setActiveTab('more');
+    if (tabsContainerRef.current) {
+      tabsContainerRef.current.scrollTo({
+        left: tabsContainerRef.current.scrollWidth,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const goToSkills = () => {
+    setActiveTab('skills');
+    if (tabsContainerRef.current) {
+      tabsContainerRef.current.scrollTo({
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   useEffect(() => {
     if (window.location.hash === '#more') {
@@ -410,17 +431,44 @@ export default function About() {
             </p>
 
             {/* Tab navigation */}
-            <div className="tab-titles" role="tablist">
+            <div className="tab-titles" role="tablist" ref={tabsContainerRef}>
               {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  role="tab"
-                  aria-selected={activeTab === tab.id}
-                  className={`tab-links${activeTab === tab.id ? ' active-link' : ''}`}
-                  onClick={() => setActiveTab(tab.id)}
-                >
-                  {tab.label}
-                </button>
+                <span key={tab.id} className="tab-item-inline">
+                  <button
+                    role="tab"
+                    aria-selected={activeTab === tab.id}
+                    className={`tab-links${activeTab === tab.id ? ' active-link' : ''}`}
+                    onClick={() => setActiveTab(tab.id)}
+                  >
+                    {tab.label}
+                  </button>
+
+                  {/* Fast-forward button (>>) on certifications tab for small phone screens */}
+                  {tab.id === 'certifications' && (
+                    <button
+                      type="button"
+                      className="tab-mobile-btn tab-mobile-ff"
+                      onClick={goToMore}
+                      title="Fast-forward to More tab"
+                      aria-label="Fast-forward to More tab"
+                    >
+                      &gt;&gt;
+                    </button>
+                  )}
+
+                  {/* Rewind button (<<) on more tab to go back to skills on small phone screens */}
+                  {tab.id === 'more' && (
+                    <button
+                      type="button"
+                      className="tab-mobile-btn tab-mobile-rewind"
+                      onClick={goToSkills}
+                      title="Rewind to Skills tab"
+                      aria-label="Rewind to Skills tab"
+                    >
+                      &lt;&lt;
+                    </button>
+                  )}
+                </span>
               ))}
             </div>
 

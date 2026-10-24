@@ -1095,16 +1095,80 @@ nav ul li a:hover::after {
 /* Tabs */
 .tab-titles {
   display: flex;
+  align-items: center;
   gap: 24px;
-  margin-bottom: 28px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 0;
+  margin-bottom: 28px;
   overflow-x: auto;
   scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tab-titles::-webkit-scrollbar {
   display: none;
+}
+
+.tab-item-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Fast-forward and Rewind buttons: HIDDEN on laptops and desktop screens */
+.tab-mobile-btn {
+  display: none !important;
+}
+
+/* ONLY shown on small mobile / phone screens where tabs overflow */
+@media (max-width: 640px) {
+  .tab-titles {
+    gap: 16px;
+  }
+
+  .tab-mobile-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    border: 1px solid var(--accent);
+    background: rgba(0, 208, 132, 0.16);
+    color: var(--accent);
+    cursor: pointer;
+    user-select: none;
+    transform: translateY(-5px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 10px rgba(0, 208, 132, 0.2);
+  }
+
+  .tab-mobile-btn:hover {
+    background: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 0 16px var(--accent-glow);
+    transform: translateY(-5px) scale(1.15);
+  }
+
+  [data-theme="light"] .tab-mobile-btn {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+  }
+
+  [data-theme="light"] .tab-mobile-btn:hover {
+    background: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 0 16px var(--accent-glow);
+    transform: translateY(-5px) scale(1.15);
+  }
 }
 
 button.tab-links,
@@ -2683,12 +2747,18 @@ footer span {
     width: calc(100% - 48px);
   }
 
+  #header {
+    min-height: auto;
+    align-items: flex-start;
+  }
+
   /* Hero mobile layout */
   .hero-container {
     flex-direction: column-reverse;
     text-align: center;
-    gap: 40px;
-    padding-top: calc(var(--nav-height) + 16px);
+    gap: 32px;
+    padding-top: calc(var(--header-offset) + 32px);
+    padding-bottom: 32px;
   }
 
   .hero-container .header-text {
@@ -2704,6 +2774,8 @@ footer span {
     position: relative;
     top: auto;
     right: auto;
+    margin-top: 12px;
+    margin-bottom: 8px;
   }
 
   .hero-image-card {
