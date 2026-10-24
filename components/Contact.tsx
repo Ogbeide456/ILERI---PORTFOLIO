@@ -143,6 +143,8 @@ export default function Contact() {
         const emailErrorMessages: Record<string, string> = {
           EMAILJS_NOT_CONFIGURED:
             "Email notification is not configured on the server.",
+          EMAILJS_PRIVATE_KEY_REQUIRED:
+            "Add your EmailJS Private Key as EMAILJS_PRIVATE_KEY in .env.local, then restart the server.",
           EMAILJS_SERVER_ACCESS_DISABLED:
             "Enable non-browser API access in EmailJS under Account > Security.",
           EMAILJS_CONFIGURATION_ERROR:
