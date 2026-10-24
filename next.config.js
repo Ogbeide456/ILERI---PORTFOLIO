@@ -13,6 +13,23 @@ const nextConfig = {
     // Type-checking runs separately in your editor; don't block dev server on it.
     ignoreBuildErrors: false,
   },
+
+  // Fix Watchpack EINVAL lstat errors on Windows system files (pagefile.sys, swapfile.sys)
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        ignored: [
+          '**/node_modules/**',
+          '**/.git/**',
+          'C:\\pagefile.sys',
+          'C:\\swapfile.sys',
+          'C:\\hiberfil.sys',
+        ],
+      };
+    }
+    return config;
+  },
 };
 
 module.exports = nextConfig;

@@ -371,24 +371,47 @@ export const CERTIFICATIONS_DATA: CertItem[] = [
 export default function About() {
   const [activeTab, setActiveTab] = useState<TabId>('skills');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const goToMore = () => {
-    setActiveTab('more');
-    if (tabsContainerRef.current) {
-      tabsContainerRef.current.scrollTo({
-        left: tabsContainerRef.current.scrollWidth,
-        behavior: 'smooth',
-      });
+  const checkScroll = () => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    const hasOverflow = el.scrollWidth > el.clientWidth + 4;
+    setCanScrollLeft(hasOverflow && el.scrollLeft > 6);
+    setCanScrollRight(hasOverflow && el.scrollLeft + el.clientWidth < el.scrollWidth - 6);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const timer = setTimeout(checkScroll, 150);
+    const el = tabsContainerRef.current;
+    if (el) {
+      el.addEventListener('scroll', checkScroll, { passive: true });
+    }
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      clearTimeout(timer);
+      if (el) el.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
+
+  const handleFastForward = () => {
+    const el = tabsContainerRef.current;
+    if (el) {
+      const scrollAmount = Math.max(160, Math.floor(el.clientWidth * 0.75));
+      el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      setTimeout(checkScroll, 350);
     }
   };
 
-  const goToSkills = () => {
-    setActiveTab('skills');
-    if (tabsContainerRef.current) {
-      tabsContainerRef.current.scrollTo({
-        left: 0,
-        behavior: 'smooth',
-      });
+  const handleRewind = () => {
+    const el = tabsContainerRef.current;
+    if (el) {
+      const scrollAmount = Math.max(160, Math.floor(el.clientWidth * 0.75));
+      el.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      setTimeout(checkScroll, 350);
     }
   };
 
@@ -402,6 +425,7 @@ export default function About() {
     if (activeTab === 'more' && window.location.hash === '#more') {
       document.getElementById('more')?.scrollIntoView();
     }
+    checkScroll();
   }, [activeTab]);
 
   return (
@@ -431,45 +455,47 @@ export default function About() {
             </p>
 
             {/* Tab navigation */}
-            <div className="tab-titles" role="tablist" ref={tabsContainerRef}>
-              {tabs.map((tab) => (
-                <span key={tab.id} className="tab-item-inline">
+            <div className="about-tabs-container">
+              {canScrollLeft && (
+                <button
+                  type="button"
+                  className="tab-scroll-btn tab-scroll-rewind"
+                  onClick={handleRewind}
+                  title="Rewind to earlier tabs"
+                  aria-label="Rewind to earlier tabs"
+                >
+                  &lt;&lt;
+                </button>
+              )}
+
+              <div className="tab-titles" role="tablist" ref={tabsContainerRef}>
+                {tabs.map((tab) => (
                   <button
+                    key={tab.id}
                     role="tab"
                     aria-selected={activeTab === tab.id}
                     className={`tab-links${activeTab === tab.id ? ' active-link' : ''}`}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => {
+                      setActiveTab(tab.id);
+                      setTimeout(checkScroll, 100);
+                    }}
                   >
                     {tab.label}
                   </button>
+                ))}
+              </div>
 
-                  {/* Fast-forward button (>>) on certifications tab for small phone screens */}
-                  {tab.id === 'certifications' && (
-                    <button
-                      type="button"
-                      className="tab-mobile-btn tab-mobile-ff"
-                      onClick={goToMore}
-                      title="Fast-forward to More tab"
-                      aria-label="Fast-forward to More tab"
-                    >
-                      &gt;&gt;
-                    </button>
-                  )}
-
-                  {/* Rewind button (<<) on more tab to go back to skills on small phone screens */}
-                  {tab.id === 'more' && (
-                    <button
-                      type="button"
-                      className="tab-mobile-btn tab-mobile-rewind"
-                      onClick={goToSkills}
-                      title="Rewind to Skills tab"
-                      aria-label="Rewind to Skills tab"
-                    >
-                      &lt;&lt;
-                    </button>
-                  )}
-                </span>
-              ))}
+              {canScrollRight && (
+                <button
+                  type="button"
+                  className="tab-scroll-btn tab-scroll-forward"
+                  onClick={handleFastForward}
+                  title="Fast-forward to Certifications and More"
+                  aria-label="Fast-forward to Certifications and More"
+                >
+                  &gt;&gt;
+                </button>
+              )}
             </div>
 
             {/* Tab contents */}
