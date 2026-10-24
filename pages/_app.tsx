@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { ThemeProvider } from '../components/ThemeContext';
 import Snowfall from '../components/Snowfall';
 import Marquee from '../components/Marquee';
+import { Analytics } from '@vercel/analytics/next';
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <div className="app-content">
                 <Component {...pageProps} />
             </div>
+            <Analytics />
         </ThemeProvider>
     );
 }
