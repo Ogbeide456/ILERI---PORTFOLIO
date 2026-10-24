@@ -1,6 +1,5 @@
 "use client";
 import { useState, type FormEvent, type ChangeEvent } from "react";
-import emailjs from '@emailjs/browser';
 
 interface FormData {
   firstName: string;
@@ -15,11 +14,6 @@ interface FormErrors {
   email?: string;
   message?: string;
 }
-//EmailJS essentials
-const serviceId = 'service_7on5xc9';
-const templateId = 'template_62vwsyh';
-const publicKey = 'uTfsYIgmUHgKtHNF6';
-
 export default function Contact() {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -101,52 +95,7 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    let emailSuccess = false;
-    let emailError: string | null = null;
-    let dbSuccess = false;
-    let dbError: string | null = null;
-
-    const fullName = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
-    const userEmail = formData.email.trim();
-    const userMessage = formData.message.trim();
-
-    console.info("Contact form submitted:", {
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      email: userEmail,
-      message: userMessage,
-    });
-
-    // 1. Send email via EmailJS to your Gmail
-    try {
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          // Support all standard EmailJS template variable naming conventions
-          from_name: fullName,
-          name: fullName,
-          user_name: fullName,
-          first_name: formData.firstName.trim(),
-          last_name: formData.lastName.trim(),
-          from_email: userEmail,
-          user_email: userEmail,
-          email: userEmail,
-          reply_to: userEmail,
-          message: userMessage,
-          to_email: "ileriunique40@gmail.com",
-          to_name: "Ileri",
-        },
-        publicKey
-      );
-      emailSuccess = true;
-    } catch (err: unknown) {
-      console.error("EmailJS error:", err);
-      const e = err as { text?: string; message?: string };
-      emailError = e?.text || e?.message || "EmailJS failed to deliver to Gmail.";
-    }
-
-    // 2. Save submission to MongoDB database
+    // Save the contact before reporting success to the user.
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -156,57 +105,73 @@ export default function Contact() {
         body: JSON.stringify({
           firstName: formData.firstName.trim(),
           lastName: formData.lastName.trim(),
-          email: formData.email.trim(),
+          email: formData.email.trim().toLowerCase(),
           message: formData.message.trim(),
         }),
       });
 
-      let data: { error?: string; message?: string; success?: boolean } = {};
+      let data: {
+        success?: boolean;
+        emailSent?: boolean;
+        emailError?: string | null;
+        errorCode?: string;
+      };
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
-        const rawText = await response.text();
-        if (!response.ok) {
-          throw new Error(`Server status ${response.status}: ${rawText.slice(0, 80)}`);
-        }
+        throw new Error("Contact API returned a non-JSON response.");
       }
 
-      if (response.ok && data.success !== false) {
-        dbSuccess = true;
-      } else {
-        dbError = data.error || "Failed to save message to MongoDB.";
-        console.error("Contact API error:", dbError);
+      if (!response.ok || data.success !== true) {
+        const error =
+          data.errorCode === "MONGODB_TLS_CONNECTION_FAILED" ||
+          data.errorCode === "MONGODB_CONNECTION_FAILED"
+            ? "MongoDB Atlas is not reachable. Check that your cluster is running and your current IP address is allowed in Atlas Network Access."
+            : data.errorCode === "MONGODB_NOT_CONFIGURED"
+              ? "MongoDB is not configured on the server. Set MONGODB_URI in .env.local and restart the server."
+              : "We couldn't save your message. Please try again later.";
+        throw new Error(error);
       }
-    } catch (err: unknown) {
-      console.error("MongoDB save error:", err);
-      dbError =
-        err instanceof Error
-          ? err.message
-          : "Could not reach database API.";
-    } finally {
-      setIsSubmitting(false);
-    }
 
-    // Handle feedback based on results
-    if (emailSuccess && dbSuccess) {
-      setSuccessMsg("✅ Message sent successfully! Delivered to Gmail and saved to MongoDB.");
+      setSuccessMsg(
+        data.emailSent
+          ? "✅ Your message was saved and sent to my email."
+          : "✅ Your message was saved. Email notification could not be sent."
+      );
+      if (!data.emailSent) {
+        const emailErrorMessages: Record<string, string> = {
+          EMAILJS_NOT_CONFIGURED:
+            "Email notification is not configured on the server.",
+          EMAILJS_SERVER_ACCESS_DISABLED:
+            "Enable non-browser API access in EmailJS under Account > Security.",
+          EMAILJS_CONFIGURATION_ERROR:
+            "Check the EmailJS service, template, and recipient configuration.",
+          EMAILJS_NETWORK_ERROR:
+            "The email service could not be reached. Please try again later.",
+          EMAILJS_PROVIDER_ERROR:
+            "EmailJS could not accept the notification. Check your EmailJS account and template.",
+        };
+        setErrorMsg(
+          emailErrorMessages[data.emailError || ""] ||
+            "Your details are safely stored, but the email notification failed."
+        );
+      }
       setFormData({ firstName: "", lastName: "", email: "", message: "" });
       setFieldErrors({});
       setTimeout(() => setSuccessMsg(""), 6000);
-    } else if (emailSuccess && !dbSuccess) {
-      // Email reached Gmail, but MongoDB is blocked by IP whitelist or connection
-      setSuccessMsg("✅ Email sent to your Gmail successfully!");
-      setErrorMsg(`⚠️ Notice: Could not save to MongoDB: ${dbError}`);
-      setFormData({ firstName: "", lastName: "", email: "", message: "" });
-      setFieldErrors({});
-    } else if (!emailSuccess && dbSuccess) {
-      setSuccessMsg("✅ Message saved to MongoDB database!");
-      setErrorMsg(`⚠️ Notice: Email delivery failed: ${emailError}`);
-      setFormData({ firstName: "", lastName: "", email: "", message: "" });
-      setFieldErrors({});
-    } else {
-      setErrorMsg(`❌ Failed to send message.\nEmailJS: ${emailError || 'Failed'}\nDatabase: ${dbError || 'Failed'}`);
+    } catch (error: unknown) {
+      console.error(
+        "Contact submission failed:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
+      setErrorMsg(
+        error instanceof Error
+          ? error.message
+          : "We couldn't save your message. Please try again later; your form entries have been kept."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

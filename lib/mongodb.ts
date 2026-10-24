@@ -1,8 +1,4 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-// Ensure environment variables from .env are loaded
-dotenv.config();
 
 /**
  * Global cache interface to maintain a cached connection across hot reloads
@@ -32,7 +28,7 @@ async function dbConnect(): Promise<typeof mongoose> {
 
   if (!uri) {
     throw new Error(
-      'Please define the MONGODB_URI (or MONGO_URI) environment variable inside .env'
+      'Please define the MONGODB_URI (or MONGO_URI) environment variable.'
     );
   }
 
