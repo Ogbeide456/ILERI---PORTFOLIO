@@ -124,13 +124,27 @@ export default function Contact() {
       }
 
       if (!response.ok || data.success !== true) {
+        const mongoErrorMessages: Record<string, string> = {
+          MONGODB_NOT_CONFIGURED:
+            "MongoDB is not configured in Vercel. Add MONGODB_URI under Project Settings > Environment Variables and redeploy.",
+          MONGODB_INVALID_URI:
+            "The MongoDB URI configured in Vercel is invalid. Copy the Atlas connection string and update MONGODB_URI.",
+          MONGODB_AUTHENTICATION_FAILED:
+            "Atlas rejected the database credentials. Check the Vercel MONGODB_URI username and password against Atlas Database Access.",
+          MONGODB_PERMISSION_DENIED:
+            "The Atlas database user lacks write permission. Grant it readWrite access to the database in this connection string.",
+          MONGODB_TLS_CONNECTION_FAILED:
+            "Vercel could not establish a secure connection to Atlas. Check the Atlas cluster status and network access configuration.",
+          MONGODB_CONNECTION_FAILED:
+            "Vercel could not connect to Atlas. Check the Atlas cluster status and network access configuration.",
+          MONGODB_DOCUMENT_VALIDATION_FAILED:
+            "The contact details did not pass database validation. Check that all fields are valid and try again.",
+          MONGODB_SAVE_FAILED:
+            "Atlas could not write this contact. Verify the database name in Vercel's MONGODB_URI and that the Atlas database user has readWrite permission.",
+        };
         const error =
-          data.errorCode === "MONGODB_TLS_CONNECTION_FAILED" ||
-          data.errorCode === "MONGODB_CONNECTION_FAILED"
-            ? "MongoDB Atlas is not reachable. Check that your cluster is running and your current IP address is allowed in Atlas Network Access."
-            : data.errorCode === "MONGODB_NOT_CONFIGURED"
-              ? "MongoDB is not configured on the server. Set MONGODB_URI in .env.local and restart the server."
-              : "We couldn't save your message. Please try again later.";
+          mongoErrorMessages[data.errorCode || ""] ||
+          "We couldn't save your message. Please try again later.";
         throw new Error(error);
       }
 
