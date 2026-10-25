@@ -133,6 +133,8 @@ export default function Contact() {
             "Atlas rejected the database credentials. Check the Vercel MONGODB_URI username and password against Atlas Database Access.",
           MONGODB_PERMISSION_DENIED:
             "The Atlas database user lacks write permission. Grant it readWrite access to the database in this connection string.",
+          MONGODB_ATLAS_WRITE_REJECTED:
+            "Atlas rejected the database write. Check the database name and readWrite role in Vercel's MONGODB_URI, then review the sanitized Vercel Function logs for the Atlas reason.",
           MONGODB_TLS_CONNECTION_FAILED:
             "Vercel could not establish a secure connection to Atlas. Check the Atlas cluster status and network access configuration.",
           MONGODB_CONNECTION_FAILED:
