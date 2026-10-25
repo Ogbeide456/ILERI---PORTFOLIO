@@ -130,7 +130,7 @@ export default function Contact() {
           MONGODB_INVALID_URI:
             "The MongoDB URI configured in Vercel is invalid. Copy the Atlas connection string and update MONGODB_URI.",
           MONGODB_AUTHENTICATION_FAILED:
-            "Atlas rejected the database credentials. Check the Vercel MONGODB_URI username and password against Atlas Database Access.",
+            "Atlas rejected the database username or password. Reset the database user's password in Atlas, update Vercel's Production MONGODB_URI, URL-encode any special characters in the password, and redeploy. MONGODB_URI takes precedence over MONGO_URI.",
           MONGODB_PERMISSION_DENIED:
             "The Atlas database user lacks write permission. Grant it readWrite access to the database in this connection string.",
           MONGODB_ATLAS_WRITE_REJECTED:
@@ -147,7 +147,12 @@ export default function Contact() {
         const error =
           mongoErrorMessages[data.errorCode || ""] ||
           "We couldn't save your message. Please try again later.";
-        throw new Error(error);
+        const emailStatus = data.emailSent
+          ? " The email notification was sent, but the message was not saved to MongoDB."
+          : data.emailError && data.emailError !== "EMAILJS_NOT_ATTEMPTED"
+            ? ` Email notification also failed (${data.emailError}).`
+            : "";
+        throw new Error(`${error}${emailStatus}`);
       }
 
       setSuccessMsg(
