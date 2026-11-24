@@ -1,13 +1,15 @@
 'use client';
 import { useEffect, useState, useRef, ReactNode } from 'react';
+import InstagramVideos from './InstagramVideos';
 
-type TabId = 'skills' | 'experience' | 'education' | 'certifications' | 'more';
+type TabId = 'skills' | 'experience' | 'education' | 'certifications' | 'videos' | 'more';
 
 const tabs: { id: TabId; label: string }[] = [
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'education', label: 'Education' },
   { id: 'certifications', label: 'Certifications' },
+  { id: 'videos', label: 'Videos' },
   { id: 'more', label: 'More...' },
 ];
 
@@ -490,8 +492,8 @@ export default function About() {
                   type="button"
                   className="tab-scroll-btn tab-scroll-forward"
                   onClick={handleFastForward}
-                  title="Fast-forward to Certifications and More"
-                  aria-label="Fast-forward to Certifications and More"
+                  title="Fast-forward to more tabs"
+                  aria-label="Fast-forward to more tabs"
                 >
                   &gt;&gt;
                 </button>
@@ -647,7 +649,14 @@ export default function About() {
                 </div>
               )}
 
-              {/* 5. MORE TAB */}
+              {/* 5. VIDEOS TAB */}
+              {activeTab === 'videos' && (
+                <div id="videos" className="tab-contents active-tab">
+                  <InstagramVideos />
+                </div>
+              )}
+
+              {/* 6. MORE TAB */}
               {activeTab === 'more' && (
                 <div id="more" className="tab-contents active-tab">
                   <div className="cv-download-card">
